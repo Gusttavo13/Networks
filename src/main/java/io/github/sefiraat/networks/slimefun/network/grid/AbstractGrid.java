@@ -244,6 +244,7 @@ public abstract class AbstractGrid extends NetworkObject {
                 }
                 gridCache.setFilter(s.toLowerCase(Locale.ROOT));
                 player.sendMessage(Theme.SUCCESS + "Filter applied");
+                blockMenu.open(player);
             });
         }
         return false;
