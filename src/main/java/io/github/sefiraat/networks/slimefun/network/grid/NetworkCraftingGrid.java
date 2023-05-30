@@ -20,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Lightable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -97,6 +98,24 @@ public class NetworkCraftingGrid extends AbstractGrid {
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
                 CACHE_MAP.put(menu.getLocation(), new GridCache(0, 0, GridCache.SortOrder.ALPHABETICAL));
+
+                menu.addMenuCloseHandler(player -> {
+                    player.closeInventory();
+                    if(!(menu.hasViewer())) {
+                        if (menu.getBlock().getType().equals(Material.REDSTONE_LAMP)) {
+                            Lightable light = (Lightable) menu.getBlock().getBlockData();
+                            light.setLit(false);
+                            menu.getBlock().setBlockData(light);
+                        }
+                    }
+                });
+                menu.addMenuOpeningHandler(player -> {
+                    if(menu.getBlock().getType().equals(Material.REDSTONE_LAMP)){
+                        Lightable light = (Lightable) menu.getBlock().getBlockData();
+                        light.setLit(true);
+                        menu.getBlock().setBlockData(light);
+                    }
+                });
 
                 menu.replaceExistingItem(getPagePrevious(), getPagePreviousStack());
                 menu.addMenuClickHandler(getPagePrevious(), (p, slot, item, action) -> {
