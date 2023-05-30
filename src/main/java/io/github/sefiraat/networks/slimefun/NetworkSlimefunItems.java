@@ -103,6 +103,7 @@ public class NetworkSlimefunItems {
     public static final NetworkRemote NETWORK_REMOTE_EMPOWERED;
     public static final NetworkRemote NETWORK_REMOTE_PRISTINE;
     public static final NetworkRemote NETWORK_REMOTE_ULTIMATE;
+    public static final NetworkRemote NETWORK_REMOTE_ULTIMATE_CRAFTING;
     public static final NetworkCrayon NETWORK_CRAYON;
     public static final NetworkConfigurator NETWORK_CONFIGURATOR;
     public static final NetworkWirelessConfigurator NETWORK_WIRELESS_CONFIGURATOR;
@@ -754,6 +755,18 @@ public class NetworkSlimefunItems {
             NetworkRemote.getRanges()[3]
         );
 
+        NETWORK_REMOTE_ULTIMATE_CRAFTING = new NetworkRemote(
+                NetworksItemGroups.TOOLS,
+                NetworksSlimefunItemStacks.NETWORK_REMOTE_ULTIMATE_CRAFTING,
+                RecipeType.ENHANCED_CRAFTING_TABLE,
+                new ItemStack[]{
+                        new ItemStack(Material.CRAFTING_TABLE), NETWORK_REMOTE_ULTIMATE.getItem(), new ItemStack(Material.CRAFTING_TABLE),
+                        INTERDIMENSIONAL_PRESENCE.getItem(), new ItemStack(Material.NETHER_STAR), INTERDIMENSIONAL_PRESENCE.getItem(),
+                        new ItemStack(Material.CRAFTING_TABLE), NETWORK_REMOTE_ULTIMATE.getItem(), new ItemStack(Material.CRAFTING_TABLE)
+                },
+                NetworkRemote.getRanges()[3]
+        );
+
         NETWORK_CRAYON = new NetworkCrayon(
             NetworksItemGroups.TOOLS,
             NetworksSlimefunItemStacks.NETWORK_CRAYON,
@@ -885,6 +898,7 @@ public class NetworkSlimefunItems {
         NETWORK_REMOTE_EMPOWERED.register(plugin);
         NETWORK_REMOTE_PRISTINE.register(plugin);
         NETWORK_REMOTE_ULTIMATE.register(plugin);
+        NETWORK_REMOTE_ULTIMATE_CRAFTING.register(plugin);
         NETWORK_CRAYON.register(plugin);
         NETWORK_CONFIGURATOR.register(plugin);
         NETWORK_WIRELESS_CONFIGURATOR.register(plugin);

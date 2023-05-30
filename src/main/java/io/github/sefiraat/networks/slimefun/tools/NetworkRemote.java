@@ -1,6 +1,7 @@
 package io.github.sefiraat.networks.slimefun.tools;
 
 import de.jeff_media.morepersistentdatatypes.DataType;
+import io.github.sefiraat.networks.slimefun.network.grid.NetworkCraftingGrid;
 import io.github.sefiraat.networks.slimefun.network.grid.NetworkGrid;
 import io.github.sefiraat.networks.utils.Keys;
 import io.github.sefiraat.networks.utils.Theme;
@@ -24,6 +25,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+
+import static io.github.sefiraat.networks.slimefun.NetworksSlimefunItemStacks.NETWORK_REMOTE_ULTIMATE;
+import static io.github.sefiraat.networks.slimefun.NetworksSlimefunItemStacks.NETWORK_REMOTE_ULTIMATE_CRAFTING;
 
 public class NetworkRemote extends SlimefunItem {
 
@@ -50,12 +54,22 @@ public class NetworkRemote extends SlimefunItem {
                         if (optional.isPresent()) {
                             final Block block = optional.get();
                             final SlimefunItem slimefunItem = BlockStorage.check(block);
-                            if (Slimefun.getProtectionManager().hasPermission(player, block, Interaction.INTERACT_BLOCK)
-                                && slimefunItem instanceof NetworkGrid
-                            ) {
-                                setGrid(e.getItem(), block, player);
-                            } else {
-                                player.sendMessage(Theme.ERROR + "Must be set to a Network Grid (not crafting grid).");
+                            if (item.equals(NETWORK_REMOTE_ULTIMATE)) {
+                                if (Slimefun.getProtectionManager().hasPermission(player, block, Interaction.INTERACT_BLOCK)
+                                        && slimefunItem instanceof NetworkGrid
+                                ) {
+                                    setGrid(e.getItem(), block, player);
+                                } else {
+                                    player.sendMessage(Theme.ERROR + "Must be set to a Network Grid (not crafting grid).");
+                                }
+                            }else if (item.equals(NETWORK_REMOTE_ULTIMATE_CRAFTING)) {
+                                if (Slimefun.getProtectionManager().hasPermission(player, block, Interaction.INTERACT_BLOCK)
+                                        && slimefunItem instanceof NetworkCraftingGrid
+                                ) {
+                                    setGrid(e.getItem(), block, player);
+                                } else {
+                                    player.sendMessage(Theme.ERROR + "Must be set to a Network Crafting Grid (not network grid).");
+                                }
                             }
                         }
                     } else {
@@ -103,7 +117,7 @@ public class NetworkRemote extends SlimefunItem {
     public static void openGrid(@Nonnull Location location, @Nonnull Player player) {
         BlockMenu blockMenu = BlockStorage.getInventory(location);
         SlimefunItem slimefunItem = BlockStorage.check(location);
-        if (slimefunItem instanceof NetworkGrid
+        if ((slimefunItem instanceof NetworkGrid || slimefunItem instanceof NetworkCraftingGrid)
             && Slimefun.getProtectionManager().hasPermission(player, location, Interaction.INTERACT_BLOCK)
         ) {
             blockMenu.open(player);

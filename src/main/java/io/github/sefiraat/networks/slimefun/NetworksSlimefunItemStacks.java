@@ -84,6 +84,7 @@ public class NetworksSlimefunItemStacks {
     public static final SlimefunItemStack NETWORK_REMOTE_EMPOWERED;
     public static final SlimefunItemStack NETWORK_REMOTE_PRISTINE;
     public static final SlimefunItemStack NETWORK_REMOTE_ULTIMATE;
+    public static final SlimefunItemStack NETWORK_REMOTE_ULTIMATE_CRAFTING;
     public static final SlimefunItemStack NETWORK_CRAYON;
     public static final SlimefunItemStack NETWORK_CONFIGURATOR;
     public static final SlimefunItemStack NETWORK_WIRELESS_CONFIGURATOR;
@@ -720,6 +721,17 @@ public class NetworksSlimefunItemStacks {
             "The grid must be chunk loaded.",
             "",
             MessageFormat.format("{0}Range: {1}{2}", Theme.CLICK_INFO, Theme.PASSIVE, "Cross Dimensional")
+        );
+
+        NETWORK_REMOTE_ULTIMATE_CRAFTING = Theme.themedSlimefunItemStack(
+                "NTW_REMOTE_ULTIMATE_CRAFTING",
+                getPreEnchantedItemStack(Material.GLOW_ITEM_FRAME, true, new Pair<>(Enchantment.ARROW_DAMAGE, 1)),
+                Theme.TOOL,
+                "Network Remote Ultimate Crafting",
+                "Opens a bound grid wirelessly with craft.",
+                "The grid must be chunk loaded.",
+                "",
+                MessageFormat.format("{0}Range: {1}{2}", Theme.CLICK_INFO, Theme.PASSIVE, "Cross Dimensional")
         );
 
         NETWORK_CRAYON = Theme.themedSlimefunItemStack(
