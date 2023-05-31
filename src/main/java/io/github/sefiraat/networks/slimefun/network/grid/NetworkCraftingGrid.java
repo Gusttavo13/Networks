@@ -55,7 +55,8 @@ public class NetworkCraftingGrid extends AbstractGrid {
         Material.CRAFTING_TABLE,
         Theme.CLICK_INFO.getColor() + "Craft",
         Theme.CLICK_INFO + "Left Click: " + Theme.PASSIVE + "Try to Craft",
-        Theme.CLICK_INFO + "Shift Left Click: " + Theme.PASSIVE + "Try to return items"
+        Theme.CLICK_INFO + "Shift Left Click: " + Theme.PASSIVE + "Try to return items",
+        Theme.CLICK_INFO + "Shift Right Click: " + Theme.PASSIVE + "Try to Craft a stack"
     );
 
     private static final Map<Location, GridCache> CACHE_MAP = new HashMap<>();
@@ -158,10 +159,12 @@ public class NetworkCraftingGrid extends AbstractGrid {
 
                 menu.replaceExistingItem(CRAFT_BUTTON_SLOT, CRAFT_BUTTON_STACK);
                 menu.addMenuClickHandler(CRAFT_BUTTON_SLOT, (player, slot, item, action) -> {
-                    if (action.isShiftClicked()) {
+                    if (action.isShiftClicked() && action.isRightClicked()) {
+                        tryCraft(menu, player, true);
+                    }else if(action.isShiftClicked()) {
                         tryReturnItems(menu);
                     } else {
-                        tryCraft(menu, player);
+                        tryCraft(menu, player, false);
                     }
                     return false;
                 });
@@ -210,7 +213,7 @@ public class NetworkCraftingGrid extends AbstractGrid {
         return FILTER;
     }
 
-    private void tryCraft(@Nonnull BlockMenu menu, @Nonnull Player player) {
+    private void tryCraft(@Nonnull BlockMenu menu, @Nonnull Player player, Boolean isStack) {
         // Get node and, if it doesn't exist - escape
         final NodeDefinition definition = NetworkStorage.getAllNetworkObjects().get(menu.getLocation());
         if (definition.getNode() == null) {
@@ -246,24 +249,60 @@ public class NetworkCraftingGrid extends AbstractGrid {
             return;
         }
 
-        // Push item
-        menu.pushItem(crafted, CRAFT_OUTPUT_SLOT);
-
         // Let's clear down all the items
-        for (int recipeSlot : CRAFT_ITEMS) {
-            final ItemStack itemInSlot = menu.getItemInSlot(recipeSlot);
-            if (itemInSlot != null) {
-                // Grab a clone for potential retrieval
-                final ItemStack itemInSlotClone = itemInSlot.clone();
-                itemInSlotClone.setAmount(1);
-                ItemUtils.consumeItem(menu.getItemInSlot(recipeSlot), 1, true);
-                // We have consumed a slot item and now the slot it empty - try to refill
-                if (menu.getItemInSlot(recipeSlot) == null) {
-                    // Process item request
-                    final GridItemRequest request = new GridItemRequest(itemInSlotClone, 1, player);
-                    final ItemStack requestingStack = definition.getNode().getRoot().getItemStack(request);
-                    if (requestingStack != null) {
-                        menu.replaceExistingItem(recipeSlot, requestingStack);
+        if(isStack){
+            int stackNumber = 0;
+            boolean itemEnough = false;
+            while (crafted.getAmount() * stackNumber <= crafted.getMaxStackSize()){
+                ++stackNumber;
+                if(itemEnough) break;
+                if(crafted.getAmount() * stackNumber > crafted.getMaxStackSize()) break;
+                for (int recipeSlot : CRAFT_ITEMS) {
+                    final ItemStack itemInSlot = menu.getItemInSlot(recipeSlot);
+                    if (itemInSlot != null) {
+                        // Grab a clone for potential retrieval
+                        final ItemStack itemInSlotClone = itemInSlot.clone();
+                        itemInSlotClone.setAmount(1);
+                        ItemUtils.consumeItem(menu.getItemInSlot(recipeSlot), 1, true);
+                        // We have consumed a slot item and now the slot it empty - try to refill
+                        if (menu.getItemInSlot(recipeSlot) == null) {
+                            // Process item request
+                            final GridItemRequest request = new GridItemRequest(itemInSlotClone, 1, player);
+
+                            final ItemStack requestingStack = definition.getNode().getRoot().getItemStack(request);
+
+                            if (requestingStack != null) {
+                                menu.replaceExistingItem(recipeSlot, requestingStack);
+                            }else {
+                                itemEnough = true;
+                            }
+                        }
+                    }
+                }
+
+            }
+            crafted.setAmount(crafted.getAmount() * (stackNumber - 1));
+            menu.pushItem(crafted, CRAFT_OUTPUT_SLOT);
+        }else {
+            // Push item
+            menu.pushItem(crafted, CRAFT_OUTPUT_SLOT);
+
+            // Let's clear down all the items
+            for (int recipeSlot : CRAFT_ITEMS) {
+                final ItemStack itemInSlot = menu.getItemInSlot(recipeSlot);
+                if (itemInSlot != null) {
+                    // Grab a clone for potential retrieval
+                    final ItemStack itemInSlotClone = itemInSlot.clone();
+                    itemInSlotClone.setAmount(1);
+                    ItemUtils.consumeItem(menu.getItemInSlot(recipeSlot), 1, true);
+                    // We have consumed a slot item and now the slot it empty - try to refill
+                    if (menu.getItemInSlot(recipeSlot) == null) {
+                        // Process item request
+                        final GridItemRequest request = new GridItemRequest(itemInSlotClone, 1, player);
+                        final ItemStack requestingStack = definition.getNode().getRoot().getItemStack(request);
+                        if (requestingStack != null) {
+                            menu.replaceExistingItem(recipeSlot, requestingStack);
+                        }
                     }
                 }
             }
