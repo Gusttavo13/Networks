@@ -54,21 +54,21 @@ public class NetworkRemote extends SlimefunItem {
                         if (optional.isPresent()) {
                             final Block block = optional.get();
                             final SlimefunItem slimefunItem = BlockStorage.check(block);
-                            if (item.equals(NETWORK_REMOTE_ULTIMATE)) {
-                                if (Slimefun.getProtectionManager().hasPermission(player, block, Interaction.INTERACT_BLOCK)
-                                        && slimefunItem instanceof NetworkGrid
-                                ) {
-                                    setGrid(e.getItem(), block, player);
-                                } else {
-                                    player.sendMessage(Theme.ERROR + "Must be set to a Network Grid (not crafting grid).");
-                                }
-                            }else if (item.equals(NETWORK_REMOTE_ULTIMATE_CRAFTING)) {
+                            if (item.equals(NETWORK_REMOTE_ULTIMATE_CRAFTING)) {
                                 if (Slimefun.getProtectionManager().hasPermission(player, block, Interaction.INTERACT_BLOCK)
                                         && slimefunItem instanceof NetworkCraftingGrid
                                 ) {
                                     setGrid(e.getItem(), block, player);
                                 } else {
                                     player.sendMessage(Theme.ERROR + "Must be set to a Network Crafting Grid (not network grid).");
+                                }
+                            }else {
+                                if (Slimefun.getProtectionManager().hasPermission(player, block, Interaction.INTERACT_BLOCK)
+                                        && slimefunItem instanceof NetworkGrid
+                                ) {
+                                    setGrid(e.getItem(), block, player);
+                                } else {
+                                    player.sendMessage(Theme.ERROR + "Must be set to a Network Grid (not crafting grid).");
                                 }
                             }
                         }
