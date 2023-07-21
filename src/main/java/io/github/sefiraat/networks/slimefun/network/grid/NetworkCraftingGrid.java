@@ -279,7 +279,6 @@ public class NetworkCraftingGrid extends AbstractGrid {
                         }
                     }
                 }
-
             }
             crafted.setAmount(crafted.getAmount() * (stackNumber - 1));
             menu.pushItem(crafted, CRAFT_OUTPUT_SLOT);
