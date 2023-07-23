@@ -761,7 +761,7 @@ public class NetworkSlimefunItems {
                 RecipeType.ENHANCED_CRAFTING_TABLE,
                 new ItemStack[]{
                         new ItemStack(Material.CRAFTING_TABLE), NETWORK_REMOTE_ULTIMATE.getItem(), new ItemStack(Material.CRAFTING_TABLE),
-                        INTERDIMENSIONAL_PRESENCE.getItem(), new ItemStack(Material.NETHER_STAR), INTERDIMENSIONAL_PRESENCE.getItem(),
+                        INTERDIMENSIONAL_PRESENCE.getItem(), RADIOACTIVE_OPTIC_STAR.getItem(), INTERDIMENSIONAL_PRESENCE.getItem(),
                         new ItemStack(Material.CRAFTING_TABLE), NETWORK_REMOTE_ULTIMATE.getItem(), new ItemStack(Material.CRAFTING_TABLE)
                 },
                 NetworkRemote.getRanges()[3]
