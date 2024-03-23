@@ -1,10 +1,12 @@
 package io.github.sefiraat.networks;
 
+import io.github.sefiraat.networks.commands.CustomModelData;
 import io.github.sefiraat.networks.commands.NetworksMain;
 import io.github.sefiraat.networks.managers.ListenerManager;
 import io.github.sefiraat.networks.managers.SupportedPluginManager;
 import io.github.sefiraat.networks.slimefun.NetheoPlants;
 import io.github.sefiraat.networks.slimefun.NetworkSlimefunItems;
+import io.github.sefiraat.networks.slimefun.ResearchSetup;
 import io.github.sefiraat.networks.slimefun.network.NetworkController;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.GitHubBuildsUpdater;
@@ -42,7 +44,7 @@ public class Networks extends JavaPlugin implements SlimefunAddon {
         instance = this;
 
         getLogger().info("########################################");
-        getLogger().info("         Networks - By Sefiraat         ");
+        getLogger().info("         Networks - By Thornya Club         ");
         getLogger().info("########################################");
 
         saveDefaultConfig();
@@ -51,9 +53,11 @@ public class Networks extends JavaPlugin implements SlimefunAddon {
         this.supportedPluginManager = new SupportedPluginManager();
 
         setupSlimefun();
+        new ResearchSetup();
 
         this.listenerManager = new ListenerManager();
         this.getCommand("networks").setExecutor(new NetworksMain());
+        this.getCommand("modeldata").setExecutor(new CustomModelData());
 
         setupMetrics();
     }
